@@ -1,35 +1,79 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { AdminSidebar } from './components/admin/layout/AdminSidebar';
+import { AdminNavbar } from './components/admin/layout/AdminNavbar';
+import { Dashboard } from './pages/admin/Dashboard';
+import { ProductManagement } from './pages/admin/ProductManagement';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const renderPage = () => {
+    switch (activeMenu) {
+      case 'dashboard':
+        return <Dashboard />;
+      case 'products':
+        return <ProductManagement />;
+      case 'orders':
+        return (
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold text-gray-900">Orders Page</h2>
+            <p className="text-gray-600 mt-2">Coming soon...</p>
+          </div>
+        );
+      case 'customers':
+        return (
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold text-gray-900">Customers Page</h2>
+            <p className="text-gray-600 mt-2">Coming soon...</p>
+          </div>
+        );
+      case 'analytics':
+        return (
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold text-gray-900">Analytics Page</h2>
+            <p className="text-gray-600 mt-2">Coming soon...</p>
+          </div>
+        );
+      case 'settings':
+        return (
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold text-gray-900">Settings Page</h2>
+            <p className="text-gray-600 mt-2">Coming soon...</p>
+          </div>
+        );
+      case 'logout':
+        return (
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold text-gray-900">Logout</h2>
+            <p className="text-gray-600 mt-2">Anda telah keluar dari sistem.</p>
+          </div>
+        );
+      default:
+        return <Dashboard />;
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="min-h-screen bg-gray-50">
+      {/* Sidebar */}
+      <AdminSidebar 
+        activeMenu={activeMenu}
+        onMenuClick={setActiveMenu}
+        isMobileOpen={isMobileSidebarOpen}
+        onClose={() => setIsMobileSidebarOpen(false)}
+      />
 
-export default App
+      {/* Main Content */}
+      <div className="lg:ml-64 min-h-screen">
+        {/* Navbar */}
+        <AdminNavbar onMenuToggle={() => setIsMobileSidebarOpen(true)} />
+
+        {/* Page Content */}
+        <main className="p-6">
+          {renderPage()}
+        </main>
+      </div>
+    </div>
+  );
+}
